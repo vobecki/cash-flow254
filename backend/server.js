@@ -8,25 +8,20 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// FIXED: Hardcoded 'false' so it strictly forces Live Production mode without needing a Railway variable
 const intasend = new Intasend(
   process.env.INTASEND_PUBLISHABLE_KEY,
   process.env.INTASEND_SECRET_KEY,
-  process.env.IS_TEST_MODE === 'true'
+  false 
 );
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// 1. FRONTEND STK TRIGGER ROUTE
 app.post('/api/pay/mpesa', async (req, res) => {
   try {
-    const { phoneNumber, amount, systemToken } = req.body;
-
-    if (!systemToken || systemToken !== process.env.SYSTEM_CHALLENGE_TOKEN) {
-      console.warn("Security Alert: Unauthorized payment trigger attempt blocked.");
-      return res.status(403).json({ success: false, error: "Security Token Challenge Failed" });
-    }
+    const { phoneNumber, amount } = req.body;
 
     let cleanPhone = phoneNumber.replace(/\D/g, '');
     if (cleanPhone.startsWith('0')) {
@@ -48,41 +43,21 @@ app.post('/api/pay/mpesa', async (req, res) => {
 
     res.status(200).json({ success: true, data: response });
   } catch (error) {
-    console.error("Payment failed to initialize:", error);
+    console.error("Payment initialization failed:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// 2. AUTOMATED INTASEND WEBHOOK RECEIVER ROUTE
 app.post('/api/webhook', (req, res) => {
   try {
     const payload = req.body;
-    
-    // Read the security challenge signature sent directly by IntaSend
-    const incomingChallenge = payload.challenge;
-
-    // Secure Verification Check against your environment rules
-    if (!incomingChallenge || incomingChallenge !== process.env.INTASEND_WEBHOOK_CHALLENGE) {
-      console.error("Security Alert: Rejecting unauthenticated webhook signature drop.");
-      return res.status(401).json({ status: "Unauthorized" });
-    }
-
-    // Process the payment update once cleared by security
-    console.log(`Webhook Event Verified: ${payload.state} for invoice ${payload.invoice_id}`);
-    
-    if (payload.state === 'COMPLETE') {
-        console.log(`💰 Success! Processed KES ${payload.amount} entry into Cashflow254.`);
-        // This is exactly where you write code to save the receipt logs to a file/database
-    }
-
-    // Always respond with a clean 200 HTTP status so IntaSend stops retrying the hook
+    console.log(`Webhook Received: ${payload.state}`);
     res.status(200).json({ status: "Success" });
   } catch (err) {
-    console.error("Webhook processing error:", err.message);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send("Internal Error");
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Cashflow254 running securely with Webhooks on port ${PORT}`);
+  console.log(`Cashflow254 running on port ${PORT}`);
 });
