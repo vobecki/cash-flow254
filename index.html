@@ -3,70 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashflow254 Gateway</title>
+    <title>Cashflow254 Dashboard Gateway</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: white; margin: 0; padding: 20px; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .payment-box { background: #1e293b; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 100%; max-width: 380px; border: 1px solid #334155; }
-        h2 { margin-top: 0; text-align: center; color: #38bdf8; font-size: 24px; }
-        label { display: block; margin: 15px 0 5px; font-size: 14px; color: #94a3b8; }
-        input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #475569; border-radius: 8px; color: white; font-size: 16px; box-sizing: border-box; }
-        input:focus { outline: none; border-color: #38bdf8; }
-        button { width: 100%; background: #0284c7; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: background 0.2s; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0b0f19; color: #f8fafc; margin: 0; padding: 20px; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .payment-card { background: #111827; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); width: 100%; max-width: 400px; border: 1px solid #1f2937; }
+        h2 { text-align: center; margin-top: 0; color: #0ea5e9; letter-spacing: 0.5px; }
+        label { display: block; margin: 20px 0 6px; font-size: 14px; color: #94a3b8; }
+        input { width: 100%; padding: 14px; background: #030712; border: 1px solid #374151; border-radius: 10px; color: white; font-size: 16px; box-sizing: border-box; transition: border 0.2s; }
+        input:focus { outline: none; border-color: #0ea5e9; }
+        button { width: 100%; background: #0284c7; color: white; border: none; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; margin-top: 25px; cursor: pointer; transition: transform 0.1s, background 0.2s; }
         button:hover { background: #0369a1; }
-        #alert { margin-top: 15px; text-align: center; font-size: 14px; font-weight: 500; display: none; padding: 10px; border-radius: 6px; }
+        button:active { transform: scale(0.98); }
+        #toast { margin-top: 20px; text-align: center; padding: 12px; border-radius: 8px; font-size: 14px; display: none; font-weight: 500; }
     </style>
 </head>
 <body>
 
-<div class="payment-box">
-    <h2>Cashflow254</h2>
-    <form id="stkForm">
-        <label>M-Pesa Phone Number</label>
-        <input type="text" id="phone" placeholder="e.g. 0712345678 or 254..." required>
+<div class="payment-card">
+    <h2>Cashflow254 Hub</h2>
+    <form id="paymentTrigger">
+        <label>M-Pesa Mobile Number</label>
+        <input type="text" id="phone" placeholder="e.g. 0712345678" required>
 
         <label>Amount (KES)</label>
-        <input type="number" id="amount" min="10" placeholder="Amount to charge" required>
+        <input type="number" id="amount" min="10" placeholder="Minimum KES 10" required>
 
         <button type="submit">Request STK Push</button>
     </form>
-    <div id="alert"></div>
+    <div id="toast"></div>
 </div>
 
 <script>
-    document.getElementById('stkForm').addEventListener('submit', async (e) => {
+    document.getElementById('paymentTrigger').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const alertBox = document.getElementById('alert');
+        const toast = document.getElementById('toast');
         
-        alertBox.style.display = 'block';
-        alertBox.style.background = '#334155';
-        alertBox.style.color = '#38bdf8';
-        alertBox.innerText = 'Connecting to IntaSend...';
+        toast.style.display = 'block';
+        toast.style.background = '#1e293b';
+        toast.style.color = '#38bdf8';
+        toast.innerText = 'Communicating with backend gateway...';
 
         const phoneNumber = document.getElementById('phone').value;
         const amount = document.getElementById('amount').value;
-        const systemToken = "AffiliateSystemSecureToken2026"; 
 
         try {
-            const res = await fetch('/api/pay/mpesa', {
+            const response = await fetch('/api/pay/mpesa', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phoneNumber, amount, systemToken })
+                body: JSON.stringify({ phoneNumber, amount })
             });
-            const feedback = await res.json();
+            const data = await response.json();
 
-            if (feedback.success) {
-                alertBox.style.background = '#064e3b';
-                alertBox.style.color = '#34d399';
-                alertBox.innerText = 'STK Push sent successfully! Check your phone for the PIN prompt.';
+            if (data.success) {
+                toast.style.background = '#064e3b';
+                toast.style.color = '#34d399';
+                toast.innerText = 'STK Prompt successfully dispatched! Authenticate via your M-Pesa PIN.';
             } else {
-                alertBox.style.background = '#7f1d1d';
-                alertBox.style.color = '#f87171';
-                alertBox.innerText = 'Failed: ' + (feedback.error || 'Check payment parameters');
+                toast.style.background = '#7f1d1d';
+                toast.style.color = '#f87171';
+                toast.innerText = 'Declined: ' + (data.error || 'Verify inputs');
             }
         } catch (err) {
-            alertBox.style.background = '#7f1d1d';
-            alertBox.style.color = '#f87171';
-            alertBox.innerText = 'Network connection problem.';
+            toast.style.background = '#7f1d1d';
+            toast.style.color = '#f87171';
+            toast.innerText = 'Network connection problem.';
         }
     });
 </script>
