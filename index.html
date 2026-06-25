@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CASH-FLOW-254 Premium Portal</title>
+
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=Space+Grotesk:wght=500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght=500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cloudflare.com">
+
+<style>
+:root{
+    --bg:#0a0612;
+    --card:#120c1d;
+    --surface-2:#1a1228;
+    --pink:#ff2d95;
+    --pink-soft:#ff2d9526;
+    --green:#00e676;
+    --green-soft:#00e67620;
+    --red:#ff4d4d;
+    --red-soft:#ff4d4d22;
+    --text:#f6f4fb;
+    --muted:#f6f4fbb3;
+    --muted-2:#f6f4fb73;
+    --border:#ffffff17;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Inter', sans-serif;
+    background:
+        radial-gradient(circle at 50% -10%, #2a0e3a 0%, transparent 55%),
+        radial-gradient(circle at 100% 110%, #06251c 0%, transparent 45%),
+        radial-gradient(#ffffff14 1px, transparent 1px),
+        var(--bg);
+    background-size: auto, auto, 26px 26px, auto;
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:32px 18px 60px;
+}
+
+.container{
+    width:100%;
+    max-width:420px;
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:30px 26px 24px;
+    border-radius:20px;
+    box-shadow:
+        0 0 0 1px #ffffff08,
+        0 30px 60px -20px #00000080,
+        0 0 50px -15px var(--pink-soft);
+    animation:rise .6s cubic-bezier(.16,1,.3,1) both;
+}
+
+@keyframes rise{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:6px;
+}
+
+.monogram{
+    position:relative;
+    width:50px;
+    height:50px;
+    flex:none;
+    border-radius:50%;
+    border:2px solid var(--pink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    letter-spacing:.2px;
+    background:linear-gradient(160deg, #ff2d95, #ff5c3c);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.monogram::after{
+    content:"";
+    position:absolute;
+    inset:-6px;
+    border-radius:50%;
+    border:1px solid var(--pink-soft);
+    animation:pulse 2.4s ease-out infinite;
+}
+
+@keyframes pulse{
+    0%{ transform:scale(.85); opacity:.9; }
+    70%{ transform:scale(1.25); opacity:0; }
+    100%{ opacity:0; }
+}
+
+h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:23px;
+    font-weight:700;
+    letter-spacing:.2px;
+    margin:0;
+    background:linear-gradient(90deg, #ffffff, var(--pink) 95%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.tagline{
+    margin:2px 0 0;
+    font-size:13px;
+    color:var(--muted);
+}
+
+hr{
+    border:none;
+    border-top:1px solid var(--border);
+    margin:22px 0 18px;
+}
+
+#sponsorBox{
+    display:none;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.3px;
+    color:var(--green);
+    background:var(--green-soft);
+    border:1px solid #00e67640;
+    padding:7px 12px;
+    border-radius:8px;
+    margin-bottom:16px;
+    width:fit-content;
+}
+
+.eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.6px;
+    color:var(--muted-2);
+    margin:0 0 10px;
+}
+
+.activation-banner{
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--green-soft);
+    border:1px solid #00e67645;
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:26px;
+}
+
+.activation-banner::before{
+    content:"";
+    position:absolute;
+    top:0; left:-60%;
+    width:50%;
+    height:100%;
+    background:linear-gradient(100deg, transparent, #ffffff22, transparent);
+    animation:shimmer 3.2s ease-in-out infinite;
+}
+
+@keyframes shimmer{
+    0%{ left:-60%; }
+    50%{ left:120%; }
+    100%{ left:120%; }
+}
+
+.activation-banner i{
+    color:var(--green);
+    font-size:18px;
+    flex:none;
+}
+
+.activation-banner p{
+    margin:0;
+    font-size:13.5px;
+    color:var(--muted);
+    line-height:1.4;
+}
+
+.activation-banner .amount{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    color:var(--green);
+    font-size:14.5px;
+}
+
+.form-section{ margin-bottom:22px; }
+
+.section-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:1.4px;
+    color:var(--muted-2);
+    margin:0 0 12px;
+}
+
+.field{ margin-bottom:14px; }
+.field:last-child{ margin-bottom:0; }
+
+label{
+    display:block;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:.3px;
+    color:var(--muted-2);
+    margin-bottom:6px;
+    text-transform:uppercase;
+}
+
+input, select{
+    width:100%;
+    padding:12px 13px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    font-size:14.5px;
+    outline:none;
+    transition:border-color .15s, box-shadow .15s;
+}
+
+input::placeholder{ color:var(--muted-2); }
+
+input:focus, select:focus{
+    border-color:var(--pink);
+    box-shadow:0 0 0 3px var(--pink-soft);
+}
+
+select{ appearance:none; }
+
+.checkbox-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:20px;
+}
+
+.checkbox-row input{ width:16px; height:16px; accent-color:var(--pink); flex:none; }
+.checkbox-row a{ color:var(--pink); text-decoration:none; }
+
+button[type="submit"]{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(90deg, var(--pink), #ff5c3c);
+    color:#fff;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    letter-spacing:.3px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:transform .15s, box-shadow .15s, background .25s;
+    box-shadow:0 8px 24px -8px var(--pink-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+}
+
+button[type="submit"]:hover{
+    transform:translateY(-1px);
+    box-shadow:0 12px 28px -8px #ff2d9577;
+}
+
+button[type="submit"]:active{ transform:translateY(0); }
+
+button[type="submit"]:disabled{
+    cursor:not-allowed;
+    transform:none;
+}
+
+button[type="submit"].waiting{
+    background:linear-gradient(90deg, #4a3960, #3a3050);
+    box-shadow:none;
+}
+
+button[type="submit"].success{
+    background:linear-gradient(90deg, var(--green), #00c264);
+    box-shadow:0 8px 24px -8px var(--green-soft);
+}
+
+button[type="submit"].failed{
+    background:linear-gradient(90deg, var(--red), #cc3a3a);
+    box-shadow:0 8px 24px -8px var(--red-soft);
+}
+
+.spinner{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    border:2px solid #ffffff55;
+    border-top-color:#fff;
+    animation:spin .7s linear infinite;
+}
+
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+#statusLine{
+    display:none;
+    margin-top:12px;
+    padding:11px 13px;
+    border-radius:9px;
+    font-size:12.5px;
+    line-height:1.45;
+}
+
+#statusLine.show{ display:block; }
+#statusLine.pending{ background:var(--surface-2); color:var(--muted); border:1px solid var(--border); }
+#statusLine.success{ background:var(--green-soft); color:var(--green); border:1px solid #00e67645; }
+#statusLine.error{ background:var(--red-soft); color:var(--red); border:1px solid #ff4d4d45; }
+
+.small{
+    font-size:12.5px;
+    color:var(--muted-2);
+    text-align:center;
+    margin:18px 0 0;
+}
+
+.small a{ color:var(--pink); text-decoration:none; font-weight:600; }
+
+.trust-line{
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.3px;
+    color:var(--muted-2);
+    margin:18px 0 0;
+}
+
+.copyright{
+    text-align:center;
+    font-size:11px;
+    color:var(--muted-2);
+    margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="brand">
+        <div class="monogram">CF254</div>
+        <div>
+            <h1>CASH-FLOW-254</h1>
+            <p class="tagline">Premium Affiliate Partner Program</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <div id="sponsorBox">Invited by: Master Network</div>
+
+    <div class="activation-banner">
+        <i class="fa-solid fa-bolt"></i>
+        <p>Dashboard License Activation Fee:<br><span class="amount">KES 100.00</span> (One-time)</p>
+    </div>
+
+    <!-- ⚡ Form Container -->
+    <form id="paymentForm">
+        <div class="form-section">
+            <p class="section-label">Account Identification</p>
+            
+            <div class="field">
+                <label for="username">Preferred Username</label>
+                <input type="text" id="username" placeholder="e.g., alex_marketing" required>
+            </div>
+
+            <div class="field">
+                <label for="email">Email Address (For Invoicing)</label>
+                <input type="email" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="field">
+                <label for="phone">M-Pesa Mobile Number</label>
+                <input type="text" id="phone" placeholder="2547XXXXXXXX" required>
+            </div>
+        </div>
+
+        <div class="checkbox-row">
+            <input type="checkbox" id="termsCheck" required>
+            <label for="termsCheck" style="display:inline; text-transform:none; font-size:13px; font-weight:400;">
+                I agree to the <a href="terms.html" target="_blank">Terms & Conditions</a>
+            </label>
+        </div>
+
+        <button type="submit" id="submitBtn">Activate Dashboard</button>
+    </form>
+
+    <div id="statusLine"></div>
+
