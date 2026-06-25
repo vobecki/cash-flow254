@@ -34,7 +34,7 @@ app.post('/api/pay', async (req, res) => {
     try {
         const response = await axios.post('https://api.intasend.com/api/v1/payment/mpesa-stk-push/', {
             public_key:   INTASEND_PUBLIC,
-            amount:       "100", 
+            amount:       100, // 💡 FIXED: Changed from "100" string to numeric integer
             phone_number: cleanPhone,
             email:        email,
             narrative:    "CASH-FLOW-254 Membership Activation"
@@ -72,7 +72,7 @@ app.post('/api/pay', async (req, res) => {
         console.error("IntaSend API Rejection Logs:", error.response?.data || error.message);
         
         // Return structured parameters even on failure to satisfy frontend validation loops
-        return res.status(200).json({ 
+        return res.status(400).json({ 
             CheckoutRequestID: "ERROR_REJECTED",
             errorMessage: "Gateway parameters layout mismatch or connection rejected."
         });
@@ -97,7 +97,7 @@ app.post('/api/callback', (req, res) => {
         return res.status(200).send("No identifier located");
     }
 
-    if (transactionState === "COMPLETE") {
+    if (transactionState === "COMPLETE" || transactionState === "SUCCESS") {
         transactions[checkoutId] = {
             ...transactions[checkoutId],
             status:     "success",
@@ -126,6 +126,9 @@ app.get('/api/status/:checkoutId', (req, res) => {
     }
     return res.status(200).json(record);
 });
+
+// ── 4. Health Check Route (Required for stable Railway deployments) ──────────
+app.get('/', (req, res) => res.send('CASH-FLOW-254 live gateway running ✅'));
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
