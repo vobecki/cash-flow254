@@ -21,9 +21,11 @@ try {
   console.error("❌ Fatal: SDK Initialization crashed:", e.message);
 }
 
+// Serves your frontend interface safely from the same folder context
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html')); 
 });
+
 
 // M-PESA STK SUBMISSION BACKEND
 app.post('/api/pay/mpesa', async (req, res) => {
