@@ -44,12 +44,13 @@
 
         const phoneNumber = document.getElementById('phone').value;
         const amount = document.getElementById('amount').value;
+        const systemToken = "AffiliateSystemSecureToken2026"; 
 
         try {
             const res = await fetch('/api/pay/mpesa', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phoneNumber, amount })
+                body: JSON.stringify({ phoneNumber, amount, systemToken })
             });
             const feedback = await res.json();
 

@@ -8,11 +8,12 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const intasend = new Intasend({
-  publishableKey: process.env.INTASEND_PUBLISHABLE_KEY,
-  secretKey: process.env.INTASEND_SECRET_KEY,
-  isTestMode: process.env.IS_TEST_MODE === 'true'
-});
+// FIXED: SDK instantiation requires direct parameters, not an object configuration
+const intasend = new Intasend(
+  process.env.INTASEND_PUBLISHABLE_KEY,
+  process.env.INTASEND_SECRET_KEY,
+  process.env.IS_TEST_MODE === 'true'
+);
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
