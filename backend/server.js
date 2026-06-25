@@ -1,4 +1,3 @@
-
 const express = require('express');
 const path = require('path');
 const Intasend = require('intasend-node');
@@ -6,28 +5,30 @@ const Intasend = require('intasend-node');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Essential Middlewares to handle user form inputs
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// This reads the keys securely from your Railway Variables setup
 const intasend = new Intasend({
   publishableKey: process.env.INTASEND_PUBLISHABLE_KEY,
   secretKey: process.env.INTASEND_SECRET_KEY,
   isTestMode: process.env.IS_TEST_MODE === 'true'
 });
 
-// Serve the clean frontend dashboard
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Live M-Pesa STK Push endpoint
+// Secure API endpoint enforcing the system token challenge
 app.post('/api/pay/mpesa', async (req, res) => {
   try {
-    const { phoneNumber, amount } = req.body;
+    const { phoneNumber, amount, systemToken } = req.body;
 
-    // Clean up phone number format (Converts 07... or +254... to 254...)
+    // Enforce Affiliate System Token validation check
+    if (systemToken !== "AffiliateSystemSecureToken2026") {
+      console.warn("Security Alert: Unauthorized payment trigger attempt blocked.");
+      return res.status(403).json({ success: false, error: "Security Token Challenge Failed" });
+    }
+
     let cleanPhone = phoneNumber.replace(/\D/g, '');
     if (cleanPhone.startsWith('0')) {
       cleanPhone = '254' + cleanPhone.substring(1);
@@ -40,7 +41,7 @@ app.post('/api/pay/mpesa', async (req, res) => {
       first_name: 'Cashflow',
       last_name: 'User',
       email: 'payment@cashflow254.co.ke',
-      host: 'https://cash-flow-254-production.up.railway.app',
+      host: 'https://railway.app',
       amount: parseFloat(amount),
       phone_number: cleanPhone,
       api_ref: `CF254-${Date.now()}`
@@ -54,5 +55,5 @@ app.post('/api/pay/mpesa', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Cashflow254 running cleanly on port ${PORT}`);
+  console.log(`Cashflow254 running securely on port ${PORT}`);
 });
