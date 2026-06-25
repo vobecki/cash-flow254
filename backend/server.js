@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// FIXED: SDK instantiation requires direct parameters, not an object configuration
 const intasend = new Intasend(
   process.env.INTASEND_PUBLISHABLE_KEY,
   process.env.INTASEND_SECRET_KEY,
@@ -19,13 +18,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Secure API endpoint enforcing the system token challenge
 app.post('/api/pay/mpesa', async (req, res) => {
   try {
     const { phoneNumber, amount, systemToken } = req.body;
 
-    // Enforce Affiliate System Token validation check
-    if (systemToken !== "AffiliateSystemSecureToken2026") {
+    // Dynamically checks against the variable you set inside Railway
+    if (!systemToken || systemToken !== process.env.SYSTEM_CHALLENGE_TOKEN) {
       console.warn("Security Alert: Unauthorized payment trigger attempt blocked.");
       return res.status(403).json({ success: false, error: "Security Token Challenge Failed" });
     }
