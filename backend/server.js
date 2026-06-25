@@ -1,33 +1,37 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const Intasend = require('intasend-node');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Enable Global CORS access so your GitHub Pages frontend is unblocked
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'intasend-challenge']
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Dynamic absolute key fallback binding
 const pubKey = process.env.INTASEND_PUBLISHABLE_KEY || '';
 const secKey = process.env.INTASEND_SECRET_KEY || '';
 
 let intasend;
 try {
-  // Correct IntaSend Node SDK initiation matching the strict signature parameters
   intasend = new Intasend(pubKey, secKey, false);
-  console.log("✅ IntaSend wrapper initialized successfully.");
+  console.log("✅ IntaSend SDK initialized successfully.");
 } catch (e) {
   console.error("❌ Fatal: SDK Initialization crashed:", e.message);
 }
 
-// Serves your frontend interface safely from the same folder context
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html')); 
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-
-// M-PESA STK SUBMISSION BACKEND
+// FIXED: Cleaned and structured M-Pesa STK Push Route
 app.post('/api/pay/mpesa', async (req, res) => {
   try {
     if (!intasend) {
@@ -36,6 +40,7 @@ app.post('/api/pay/mpesa', async (req, res) => {
 
     const { phoneNumber, amount } = req.body;
 
+    // Clean up mobile digits cleanly to 254 format
     let cleanPhone = phoneNumber.replace(/\D/g, '');
     if (cleanPhone.startsWith('0')) {
       cleanPhone = '254' + cleanPhone.substring(1);
@@ -44,41 +49,42 @@ app.post('/api/pay/mpesa', async (req, res) => {
     }
 
     const collection = intasend.collection();
+    
+    // CORRECTED SDK SIGNATURE: Exact property parameter mapping
     const response = await collection.mpesaStkPush({
-      first_name: 'Cashflow',
-      last_name: 'User',
-      email: 'payment@cashflow254.co.ke',
-      host: 'https://railway.app',
-      amount: parseFloat(amount),
       phone_number: cleanPhone,
-      api_ref: `CF254-${Date.now()}`
+      amount: parseFloat(amount),
+      email: "payment@cashflow254.co.ke",
+      first_name: "Cashflow",
+      last_name: "User",
+      narrative: "Cashflow254 Deposit Link"
     });
 
     res.status(200).json({ success: true, data: response });
   } catch (error) {
-    console.error("Payment deployment routing error triggered:", error);
-    res.status(500).json({ success: false, error: error.message || "IntaSend Rejected Request" });
+    console.error("Safaricom API Drop Error:", error);
+    res.status(500).json({ success: false, error: error.message || "STK Push Rejected By Provider" });
   }
 });
 
-// SECURE BACKEND WEBHOOK LISTENER
+// Secure Automated Webhook Gateway
 app.post('/api/webhook', (req, res) => {
   try {
     const challengeHeader = req.headers['intasend-challenge'] || req.body.challenge;
     const challengeTarget = process.env.INTASEND_WEBHOOK_CHALLENGE;
 
     if (!challengeHeader || challengeHeader !== challengeTarget) {
-      return res.status(401).json({ error: "Challenge mismatch alert block." });
+      return res.status(401).json({ error: "Challenge mismatch validation dropped." });
     }
 
     const payload = req.body;
-    console.log(`Webhook connection state verified: ${payload.state}`);
+    console.log(`Webhook Event Verified: ${payload.state}`);
     res.status(200).json({ status: "Success" });
   } catch (err) {
-    res.status(500).send("Processing breakdown.");
+    res.status(500).send("Processing error.");
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Cashflow254 structural cluster live on Port ${PORT}`);
+  console.log(`Cashflow254 live container operating on Port ${PORT}`);
 });
