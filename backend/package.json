@@ -1,14 +1,16 @@
 {
-  "name": "cash-flow-254-backend",
+  "name": "cashflow254",
   "version": "1.0.0",
-  "description": "Production API gateway for M-Pesa STK Push",
+  "description": "Clean tracking gateway for Cashflow254 via IntaSend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "cors": "^2.8.5",
-    "axios": "^1.7.2"
+    "intasend-node": "^1.1.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
