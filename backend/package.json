@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "intasend-node": "^1.1.7"
+    "intasend-node": "*"
   },
   "engines": {
     "node": ">=18.0.0"
