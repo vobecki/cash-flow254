@@ -47,7 +47,8 @@
         const amount = document.getElementById('amount').value;
 
         try {
-            const response = await fetch('/api/pay/mpesa', {
+            // FIXED: Pointing directly to your live, successful Railway backend production URL
+            const response = await fetch('https://railway.app', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phoneNumber, amount })
