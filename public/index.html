@@ -980,8 +980,9 @@
         showStatus('status-register', 'info', 'Creating your account…');
         // Stub: replace with real register endpoint
         await new Promise(r => setTimeout(r, 1500));
-        showStatus('status-register', 'success', 'Account created! Check your email to verify.');
+        showStatus('status-register', 'success', 'Account created! Redirecting to deposit…');
         setLoading('reg-spinner', 'reg-btn-text', null, false, 'Create Account');
+        setTimeout(() => switchTab('payment'), 1800);
     });
 
     /* ─── PAYMENT (ORIGINAL LOGIC PRESERVED) ───────────────── */
