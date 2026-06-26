@@ -3,97 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashflow254 — Secure Gateway</title>
+    <title>Cashflow254 | Premium Payment Gateway</title>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #111827;
-            --accent-green: #10b981;
-            --accent-hover: #059669;
-            --text-main: #ffffff;
+            --bg-color: #060913;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --accent-glow: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --safari-green: #10b981;
+            --safari-hover: #059669;
+            --text-main: #f3f4f6;
             --text-muted: #9ca3af;
-            --input-bg: #1f2937;
-            --border-color: #374151;
+            --input-bg: rgba(31, 41, 55, 0.5);
+            --border-color: rgba(55, 65, 81, 0.6);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.08) 0%, transparent 40%);
             color: var(--text-main);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .card {
             background: var(--card-bg);
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 45px 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             border: 1px solid var(--border-color);
             box-sizing: border-box;
+            position: relative;
         }
 
-        .brand-header {
+        /* Top highlight accent bar */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 30px;
+            right: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--safari-green), #6ee7b7, transparent);
+        }
+
+        .brand-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 35px;
         }
 
-        .brand-header h2 {
-            margin: 0 0 8px 0;
-            font-size: 28px;
+        /* Animated SVG Logo */
+        .logo-svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.3));
+        }
+
+        .brand-container h2 {
+            margin: 0 0 6px 0;
+            font-size: 26px;
             font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to right, #10b981, #34d399);
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff 30%, #a7f3d0 100%);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .brand-header p {
+        .brand-container p {
             margin: 0;
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            font-weight: 400;
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 26px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
+            margin-bottom: 10px;
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-        }
-
-        .input-wrapper {
-            position: relative;
+            letter-spacing: 1px;
+            color: #9ca3af;
         }
 
         input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 16px;
             background-color: var(--input-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 12px;
             box-sizing: border-box;
             font-size: 16px;
             color: var(--text-main);
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         input:focus {
             outline: none;
-            border-color: var(--accent-green);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+            border-color: var(--safari-green);
+            background-color: rgba(31, 41, 55, 0.8);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
         }
 
         input::placeholder {
@@ -102,28 +131,32 @@
 
         button {
             width: 100%;
-            padding: 16px;
-            background-color: var(--accent-green);
+            padding: 18px;
+            background: linear-gradient(135deg, var(--safari-green) 0%, #059669 100%);
             color: #ffffff;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 700;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
         }
 
         button:hover {
-            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
         }
 
         button:active {
-            transform: scale(0.98);
+            transform: translateY(1px);
         }
 
         button:disabled {
-            background-color: #4b5563;
+            background: #374151 !important;
+            color: #9ca3af;
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
@@ -134,28 +167,34 @@
             text-align: center;
             font-size: 14px;
             font-weight: 500;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 14px;
+            border-radius: 10px;
             display: none;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .info {
             display: block !important;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(59, 130, 246, 0.08);
             color: #60a5fa;
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .success {
             display: block !important;
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(16, 185, 129, 0.08);
             color: #34d399;
             border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .error {
             display: block !important;
-            background: rgba(239, 68, 68, 0.1);
+            background: rgba(239, 68, 68, 0.08);
             color: #f87171;
             border: 1px solid rgba(239, 68, 68, 0.2);
         }
@@ -164,25 +203,35 @@
 <body>
 
 <div class="card">
-    <div class="brand-header">
+    <div class="brand-container">
+        <!-- Premium SVG Inline Logo Asset -->
+        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="46" stroke="url(#logoGlow)" stroke-width="3" stroke-dasharray="10 6"/>
+            <path d="M35 65L50 35L65 65" stroke="#10b981" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M42 53H58" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="50" cy="35" r="4" fill="#ffffff"/>
+            <defs>
+                <linearGradient id="logoGlow" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#10b981"/>
+                    <stop offset="1" stop-color="#3b82f6"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        
         <h2>CASHFLOW254</h2>
-        <p>Secure M-Pesa Payment Gateway</p>
+        <p>SECURE MPESA INSTANT EXPRESS</p>
     </div>
     
     <form id="paymentForm">
         <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <div class="input-wrapper">
-                <input type="text" id="phone" placeholder="e.g. 254712345678" required>
-            </div>
+            <label for="phone">M-Pesa Mobile Number</label>
+            <input type="text" id="phone" placeholder="e.g. 254712345678" required>
         </div>
         <div class="form-group">
-            <label for="amount">Amount (KES)</label>
-            <div class="input-wrapper">
-                <input type="number" id="amount" placeholder="Minimum 10 KES" required>
-            </div>
+            <label for="amount">Amount to Deposit (KES)</label>
+            <input type="number" id="amount" placeholder="Min KES 10" required>
         </div>
-        <button type="submit" id="payBtn">Initiate STK Push</button>
+        <button type="submit" id="payBtn">Authorize Payment</button>
     </form>
     
     <div id="status"></div>
@@ -196,7 +245,7 @@
         const statusDiv = document.getElementById('status');
         const payBtn = document.getElementById('payBtn');
 
-        statusDiv.innerText = "Sending STK Push prompt...";
+        statusDiv.innerText = "Requesting secure STK channel...";
         statusDiv.className = "info";
         payBtn.disabled = true;
 
@@ -210,14 +259,14 @@
             const data = await response.json();
             
             if (response.ok) {
-                statusDiv.innerText = "STK Push sent successfully! Enter your PIN on your phone.";
+                statusDiv.innerText = "Secure linkage established! Complete transaction on your mobile terminal.";
                 statusDiv.className = "success";
             } else {
-                statusDiv.innerText = "Error: " + (data.error || "Failed to trigger push.");
+                statusDiv.innerText = "Terminal Response: " + (data.error || "Failed execution request.");
                 statusDiv.className = "error";
             }
         } catch (err) {
-            statusDiv.innerText = "Network error occurred. Connection failed.";
+            statusDiv.innerText = "Communication failure. Check connection parameters.";
             statusDiv.className = "error";
         } finally {
             payBtn.disabled = false;
