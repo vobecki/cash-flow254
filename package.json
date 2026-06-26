@@ -1,17 +1,11 @@
 {
   "name": "cashflow254",
   "version": "1.0.0",
-  "description": "Clean tracking gateway for Cashflow254 via IntaSend",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "description": "Vercel Deployment for Cashflow254 Payment System",
+  "main": "api/server.js",
   "dependencies": {
-    "express": "^4.19.2",
-    "intasend-node": "*",
-    "cors": "^2.8.5"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.0"
   }
 }
