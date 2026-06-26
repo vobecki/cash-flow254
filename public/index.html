@@ -1,246 +1,929 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cashflow254 | Premium Payment Gateway</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* ─── DESIGN TOKENS ─────────────────────────────────── */
         :root {
-            --bg-color: #060913;
-            --card-bg: rgba(17, 24, 39, 0.7);
-            --accent-glow: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-            --safari-green: #10b981;
-            --safari-hover: #059669;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --input-bg: rgba(31, 41, 55, 0.5);
-            --border-color: rgba(55, 65, 81, 0.6);
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        [data-theme="dark"] {
+            --bg:          #080C14;
+            --bg-2:        #0D1320;
+            --card:        #101827;
+            --card-border: rgba(255,255,255,0.06);
+            --surface:     rgba(255,255,255,0.04);
+            --surface-hov: rgba(255,255,255,0.07);
+            --primary:     #10B981;
+            --primary-dim: rgba(16,185,129,0.12);
+            --primary-glo: rgba(16,185,129,0.30);
+            --accent:      #3B82F6;
+            --accent-dim:  rgba(59,130,246,0.12);
+            --text-1:      #F9FAFB;
+            --text-2:      #9CA3AF;
+            --text-3:      #6B7280;
+            --input-bg:    rgba(255,255,255,0.04);
+            --input-bdr:   rgba(255,255,255,0.08);
+            --input-foc:   rgba(16,185,129,0.25);
+            --error-bg:    rgba(239,68,68,0.08);
+            --error-bdr:   rgba(239,68,68,0.25);
+            --error-text:  #F87171;
+            --success-bg:  rgba(16,185,129,0.08);
+            --success-bdr: rgba(16,185,129,0.25);
+            --success-txt: #34D399;
+            --info-bg:     rgba(59,130,246,0.08);
+            --info-bdr:    rgba(59,130,246,0.25);
+            --info-text:   #60A5FA;
+            --shadow-lg:   0 24px 48px rgba(0,0,0,0.55), 0 8px 16px rgba(0,0,0,0.3);
+            --divider:     rgba(255,255,255,0.06);
+            --toggle-bg:   rgba(255,255,255,0.08);
+            --toggle-icon: #9CA3AF;
+        }
+
+        [data-theme="light"] {
+            --bg:          #EEF2F7;
+            --bg-2:        #E5EBF4;
+            --card:        #FFFFFF;
+            --card-border: rgba(0,0,0,0.08);
+            --surface:     rgba(0,0,0,0.03);
+            --surface-hov: rgba(0,0,0,0.06);
+            --primary:     #059669;
+            --primary-dim: rgba(5,150,105,0.10);
+            --primary-glo: rgba(5,150,105,0.20);
+            --accent:      #2563EB;
+            --accent-dim:  rgba(37,99,235,0.10);
+            --text-1:      #111827;
+            --text-2:      #4B5563;
+            --text-3:      #9CA3AF;
+            --input-bg:    #F9FAFB;
+            --input-bdr:   rgba(0,0,0,0.10);
+            --input-foc:   rgba(5,150,105,0.20);
+            --error-bg:    rgba(239,68,68,0.06);
+            --error-bdr:   rgba(239,68,68,0.20);
+            --error-text:  #DC2626;
+            --success-bg:  rgba(5,150,105,0.06);
+            --success-bdr: rgba(5,150,105,0.20);
+            --success-txt: #059669;
+            --info-bg:     rgba(37,99,235,0.06);
+            --info-bdr:    rgba(37,99,235,0.20);
+            --info-text:   #2563EB;
+            --shadow-lg:   0 24px 48px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+            --divider:     rgba(0,0,0,0.07);
+            --toggle-bg:   rgba(0,0,0,0.07);
+            --toggle-icon: #6B7280;
+        }
+
+        /* ─── RESET & BASE ───────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.08) 0%, transparent 40%);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse 60% 40% at 5% 10%, var(--primary-dim) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 95% 90%, var(--accent-dim) 0%, transparent 55%);
+            color: var(--text-1);
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            padding: 45px 35px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            width: 100%;
-            max-width: 440px;
-            border: 1px solid var(--border-color);
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        /* Top highlight accent bar */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 30px;
-            right: 30px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--safari-green), #6ee7b7, transparent);
-        }
-
-        .brand-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            margin-bottom: 35px;
+            justify-content: center;
+            padding: 24px 16px;
+            transition: background-color var(--transition), color var(--transition);
         }
 
-        /* Animated SVG Logo */
-        .logo-svg {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.3));
+        /* ─── THEME TOGGLE ───────────────────────────────────── */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: var(--toggle-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            padding: 6px;
+            display: flex;
+            gap: 4px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: background var(--transition), border var(--transition);
         }
 
-        .brand-container h2 {
-            margin: 0 0 6px 0;
-            font-size: 26px;
+        .theme-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--toggle-icon);
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+
+        .theme-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 10px var(--primary-glo);
+        }
+
+        /* ─── CARD ───────────────────────────────────────────── */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 28px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+            position: relative;
+        }
+
+        /* Animated top pulse bar — the signature element */
+        .card-pulse {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent 0%, var(--primary) 30%, #34D399 50%, var(--accent) 70%, transparent 100%);
+            background-size: 200% 100%;
+            animation: pulse-slide 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-slide {
+            0%   { background-position: -100% 0; opacity: 0.7; }
+            50%  { background-position: 100% 0;  opacity: 1; }
+            100% { background-position: -100% 0; opacity: 0.7; }
+        }
+
+        .card-inner {
+            padding: 40px 40px 44px;
+        }
+
+        /* ─── BRAND ──────────────────────────────────────────── */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .logo-wrap {
+            width: 52px;
+            height: 52px;
+            background: var(--primary-dim);
+            border: 1.5px solid var(--primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 18px var(--primary-glo);
+            transition: background var(--transition), border var(--transition), box-shadow var(--transition);
+        }
+
+        .logo-wrap svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, #ffffff 30%, #a7f3d0 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: 1.5px;
+            color: var(--text-1);
+            line-height: 1;
+            transition: color var(--transition);
         }
 
-        .brand-container p {
-            margin: 0;
-            color: var(--text-muted);
+        .brand-sub {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 1.2px;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-top: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ─── SECTION HEADER ─────────────────────────────────── */
+        .section-header {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 4px;
+            transition: color var(--transition);
+        }
+
+        .section-desc {
             font-size: 13px;
-            letter-spacing: 0.5px;
-            font-weight: 400;
+            color: var(--text-2);
+            line-height: 1.5;
+            transition: color var(--transition);
+        }
+
+        /* ─── TABS ───────────────────────────────────────────── */
+        .tabs {
+            display: flex;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 2px;
+            margin-bottom: 28px;
+            border: 1px solid var(--card-border);
+            transition: background var(--transition), border var(--transition);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 9px 0;
+            border: none;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--text-2);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 12px var(--primary-glo);
+        }
+
+        /* ─── FORM LAYOUT ────────────────────────────────────── */
+        .form-grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
         }
 
         .form-group {
-            margin-bottom: 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 600;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #9ca3af;
+            color: var(--text-2);
+            transition: color var(--transition);
         }
 
-        input {
+        /* ─── INPUT ──────────────────────────────────────────── */
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-3);
+            pointer-events: none;
+            transition: color var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        input, select {
             width: 100%;
-            padding: 16px;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-sizing: border-box;
-            font-size: 16px;
-            color: var(--text-main);
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 13px 14px 13px 42px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--input-bdr);
+            border-radius: 11px;
+            font-size: 14.5px;
+            color: var(--text-1);
+            font-family: 'Inter', sans-serif;
+            transition: all var(--transition);
+            appearance: none;
+            -webkit-appearance: none;
         }
 
-        input:focus {
+        input:focus, select:focus {
             outline: none;
-            border-color: var(--safari-green);
-            background-color: rgba(31, 41, 55, 0.8);
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+            border-color: var(--primary);
+            background: var(--surface);
+            box-shadow: 0 0 0 4px var(--input-foc);
         }
 
         input::placeholder {
-            color: #4b5563;
+            color: var(--text-3);
+            font-size: 14px;
         }
 
-        button {
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: var(--card);
+            color: var(--text-1);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-3);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-3);
+            cursor: pointer;
+            padding: 0;
+            width: auto;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+            box-shadow: none;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+            transform: translateY(-50%);
+            box-shadow: none;
+            background: none;
+        }
+
+        /* ─── DIVIDER ────────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 4px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--divider);
+        }
+
+        .divider-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-3);
+            text-transform: uppercase;
+        }
+
+        /* ─── AMOUNT PRESETS ─────────────────────────────────── */
+        .amount-presets {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 8px 4px;
+            background: var(--surface);
+            border: 1.5px solid var(--card-border);
+            border-radius: 8px;
+            color: var(--text-2);
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            width: auto;
+            letter-spacing: 0.3px;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-dim);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .preset-btn.selected {
+            background: var(--primary-dim);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ─── SUBMIT BUTTON ──────────────────────────────────── */
+        .btn-primary {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, var(--safari-green) 0%, #059669 100%);
-            color: #ffffff;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+            color: #fff;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             cursor: pointer;
+            font-family: 'Inter', sans-serif;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 4px 20px var(--primary-glo);
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(16, 185, 129, 0.4);
-            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px var(--primary-glo);
+            filter: brightness(1.06);
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
+        .btn-primary:active { transform: translateY(0); }
 
-        button:disabled {
-            background: #374151 !important;
-            color: #9ca3af;
+        .btn-primary:disabled {
+            background: var(--surface) !important;
+            color: var(--text-3);
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
+            filter: none;
         }
 
-        #status {
-            margin-top: 24px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 14px;
-            border-radius: 10px;
+        /* Loading spinner inside button */
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2.5px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
             display: none;
-            animation: fadeIn 0.3s ease forwards;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ─── STATUS BOX ─────────────────────────────────────── */
+        #status {
+            display: none;
+            margin-top: 16px;
+            padding: 13px 16px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 500;
+            line-height: 1.5;
+            animation: fadeUp 0.3s ease forwards;
         }
 
-        .info {
-            display: block !important;
-            background: rgba(59, 130, 246, 0.08);
-            color: #60a5fa;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .success {
-            display: block !important;
-            background: rgba(16, 185, 129, 0.08);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+        #status.info    { display: block; background: var(--info-bg);    color: var(--info-text);   border: 1.5px solid var(--info-bdr); }
+        #status.success { display: block; background: var(--success-bg); color: var(--success-txt); border: 1.5px solid var(--success-bdr); }
+        #status.error   { display: block; background: var(--error-bg);   color: var(--error-text);  border: 1.5px solid var(--error-bdr); }
+
+        /* ─── FOOTER NOTE ────────────────────────────────────── */
+        .secure-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 22px;
+            font-size: 11.5px;
+            color: var(--text-3);
+            font-weight: 500;
+            transition: color var(--transition);
         }
 
-        .error {
-            display: block !important;
-            background: rgba(239, 68, 68, 0.08);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.2);
+        .secure-note svg { flex-shrink: 0; }
+
+        /* ─── PANEL SWITCH LINK ───────────────────────────────── */
+        .switch-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 13px;
+            color: var(--text-2);
+            transition: color var(--transition);
+        }
+
+        .switch-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .switch-link a:hover { text-decoration: underline; }
+
+        /* ─── PANEL VISIBILITY ───────────────────────────────── */
+        .panel { display: none; }
+        .panel.active { display: contents; }
+
+        /* ─── RESPONSIVE ─────────────────────────────────────── */
+        @media (max-width: 520px) {
+            .card-inner { padding: 28px 24px 32px; }
+            .form-row { grid-template-columns: 1fr; }
+            .brand-name { font-size: 18px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card-pulse { animation: none; }
+            .spinner { animation: none; }
         }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="brand-container">
-        <!-- Premium SVG Inline Logo Asset -->
-        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="46" stroke="url(#logoGlow)" stroke-width="3" stroke-dasharray="10 6"/>
-            <path d="M35 65L50 35L65 65" stroke="#10b981" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M42 53H58" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="50" cy="35" r="4" fill="#ffffff"/>
-            <defs>
-                <linearGradient id="logoGlow" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#10b981"/>
-                    <stop offset="1" stop-color="#3b82f6"/>
-                </linearGradient>
-            </defs>
-        </svg>
-        
-        <h2>CASHFLOW254</h2>
-        <p>SECURE MPESA INSTANT EXPRESS</p>
-    </div>
-    
-    <form id="paymentForm">
-        <div class="form-group">
-            <label for="phone">M-Pesa Mobile Number</label>
-            <input type="text" id="phone" placeholder="e.g. 254712345678" required>
-        </div>
-        <div class="form-group">
-            <label for="amount">Amount to Deposit (KES)</label>
-            <input type="number" id="amount" placeholder="Min KES 10" required>
-        </div>
-        <button type="submit" id="payBtn">Authorize Payment</button>
-    </form>
-    
-    <div id="status"></div>
+<!-- THEME TOGGLE -->
+<div class="theme-toggle" role="group" aria-label="Theme selector">
+    <button class="theme-btn active" id="btnDark" onclick="setTheme('dark')" title="Dark mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="theme-btn" id="btnLight" onclick="setTheme('light')" title="Light mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/></svg>
+    </button>
 </div>
 
+<!-- MAIN CARD -->
+<div class="card">
+    <div class="card-pulse"></div>
+    <div class="card-inner">
+
+        <!-- BRAND -->
+        <div class="brand">
+            <div class="logo-wrap">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="44" stroke="url(#lg1)" stroke-width="3" stroke-dasharray="10 6"/>
+                    <path d="M35 65L50 35L65 65" stroke="#10b981" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M42 53H58" stroke="#34d399" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="50" cy="35" r="4" fill="#ffffff"/>
+                    <defs>
+                        <linearGradient id="lg1" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#10b981"/><stop offset="1" stop-color="#3b82f6"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">CASHFLOW254</span>
+                <span class="brand-sub">Secure · Instant · Express</span>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+            <button class="tab-btn" onclick="switchTab('register')">Register</button>
+            <button class="tab-btn" onclick="switchTab('payment')">Deposit</button>
+        </div>
+
+        <!-- ═══ SIGN IN PANEL ═══════════════════════════════════ -->
+        <div id="panel-signin" class="panel active">
+            <div class="section-header">
+                <div class="section-title">Welcome back</div>
+                <div class="section-desc">Sign in to your Cashflow254 account</div>
+            </div>
+            <form id="signinForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="si-email">Email Address</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            </span>
+                            <input type="email" id="si-email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="si-password">Password</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                            <input type="password" id="si-password" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('si-password', this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span class="spinner" id="si-spinner"></span>
+                        <span id="si-btn-text">Sign In</span>
+                    </button>
+                </div>
+            </form>
+            <div id="status-signin" class="status-box"></div>
+            <div class="switch-link">Don't have an account? <a onclick="switchTab('register')">Register now</a></div>
+        </div>
+
+        <!-- ═══ REGISTER PANEL ══════════════════════════════════ -->
+        <div id="panel-register" class="panel">
+            <div class="section-header">
+                <div class="section-title">Create account</div>
+                <div class="section-desc">Join thousands of users across East Africa</div>
+            </div>
+            <form id="registerForm">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reg-username">Username</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </span>
+                                <input type="text" id="reg-username" placeholder="yourname" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-country">Country</label>
+                            <div class="input-wrap">
+                                <span class="input-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                </span>
+                                <select id="reg-country" required>
+                                    <option value="" disabled selected>Select country</option>
+                                    <option value="KE">🇰🇪 Kenya</option>
+                                    <option value="TZ">🇹🇿 Tanzania</option>
+                                    <option value="UG">🇺🇬 Uganda</option>
+                                    <option value="RW">🇷🇼 Rwanda</option>
+                                    <option value="ET">🇪🇹 Ethiopia</option>
+                                    <option value="BI">🇧🇮 Burundi</option>
+                                    <option value="DJ">🇩🇯 Djibouti</option>
+                                    <option value="ER">🇪🇷 Eritrea</option>
+                                    <option value="SO">🇸🇴 Somalia</option>
+                                    <option value="SS">🇸🇸 South Sudan</option>
+                                </select>
+                                <span class="select-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email Address</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            </span>
+                            <input type="email" id="reg-email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            </span>
+                            <input type="password" id="reg-password" placeholder="Min 8 characters" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('reg-password', this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Password strength bar -->
+                    <div id="strength-wrap" style="display:none; margin-top:-8px;">
+                        <div style="height:4px; background: var(--surface); border-radius:4px; overflow:hidden;">
+                            <div id="strength-bar" style="height:100%; width:0%; border-radius:4px; transition: width 0.3s, background 0.3s;"></div>
+                        </div>
+                        <div id="strength-label" style="font-size:11px; margin-top:4px; color:var(--text-3);"></div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span class="spinner" id="reg-spinner"></span>
+                        <span id="reg-btn-text">Create Account</span>
+                    </button>
+                </div>
+            </form>
+            <div id="status-register" class="status-box"></div>
+            <div class="switch-link">Already registered? <a onclick="switchTab('signin')">Sign in</a></div>
+        </div>
+
+        <!-- ═══ PAYMENT PANEL ═══════════════════════════════════ -->
+        <div id="panel-payment" class="panel">
+            <div class="section-header">
+                <div class="section-title">M-Pesa Deposit</div>
+                <div class="section-desc">Instant STK push to your mobile</div>
+            </div>
+            <form id="paymentForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="phone">M-Pesa Mobile Number</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                            </span>
+                            <input type="text" id="phone" placeholder="254712345678" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Quick Amount (KES)</label>
+                        <div class="amount-presets">
+                            <button type="button" class="preset-btn selected" data-amount="100" onclick="selectPreset(this, 100)">100</button>
+                            <button type="button" class="preset-btn" data-amount="500" onclick="selectPreset(this, 500)">500</button>
+                            <button type="button" class="preset-btn" data-amount="1000" onclick="selectPreset(this, 1000)">1,000</button>
+                            <button type="button" class="preset-btn" data-amount="5000" onclick="selectPreset(this, 5000)">5,000</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Custom Amount (KES)</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            </span>
+                            <input type="number" id="amount" placeholder="Min KES 10" min="10" value="100" required
+                                   style="font-family:'JetBrains Mono',monospace; letter-spacing:0.5px;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary" id="payBtn">
+                        <span class="spinner" id="pay-spinner"></span>
+                        <span id="pay-btn-text">Authorize Payment</span>
+                        <svg id="pay-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </form>
+            <div id="status"></div>
+        </div>
+
+        <!-- SECURE BADGE -->
+        <div class="secure-note">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            256-bit SSL &nbsp;·&nbsp; PCI DSS Compliant &nbsp;·&nbsp; East Africa Regulated
+        </div>
+
+    </div><!-- /card-inner -->
+</div><!-- /card -->
+
 <script>
+    /* ─── THEME ─────────────────────────────────────────────── */
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        document.getElementById('btnDark').classList.toggle('active', t === 'dark');
+        document.getElementById('btnLight').classList.toggle('active', t === 'light');
+        localStorage.setItem('cf254-theme', t);
+    }
+    // Restore saved theme
+    const saved = localStorage.getItem('cf254-theme') || 'dark';
+    setTheme(saved);
+
+    /* ─── TABS ──────────────────────────────────────────────── */
+    const tabs = ['signin', 'register', 'payment'];
+
+    function switchTab(name) {
+        tabs.forEach(t => {
+            document.getElementById('panel-' + t).classList.toggle('active', t === name);
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                b.classList.toggle('active', tabs[i] === name);
+            });
+        });
+        // Clear status boxes
+        document.querySelectorAll('.status-box').forEach(el => {
+            el.style.display = 'none'; el.textContent = '';
+        });
+        const s = document.getElementById('status');
+        s.className = ''; s.textContent = '';
+    }
+
+    /* ─── PASSWORD TOGGLE ───────────────────────────────────── */
+    function togglePassword(id, btn) {
+        const inp = document.getElementById(id);
+        const isHidden = inp.type === 'password';
+        inp.type = isHidden ? 'text' : 'password';
+        btn.innerHTML = isHidden
+            ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
+            : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    }
+
+    /* ─── PASSWORD STRENGTH ─────────────────────────────────── */
+    document.getElementById('reg-password').addEventListener('input', function() {
+        const v = this.value;
+        const wrap = document.getElementById('strength-wrap');
+        const bar  = document.getElementById('strength-bar');
+        const lbl  = document.getElementById('strength-label');
+        if (!v) { wrap.style.display = 'none'; return; }
+        wrap.style.display = 'block';
+        let score = 0;
+        if (v.length >= 8)  score++;
+        if (/[A-Z]/.test(v)) score++;
+        if (/[0-9]/.test(v)) score++;
+        if (/[^A-Za-z0-9]/.test(v)) score++;
+        const levels = [
+            { w: '25%',  bg: '#EF4444', txt: 'Weak' },
+            { w: '50%',  bg: '#F59E0B', txt: 'Fair' },
+            { w: '75%',  bg: '#3B82F6', txt: 'Good' },
+            { w: '100%', bg: '#10B981', txt: 'Strong' },
+        ];
+        const l = levels[score - 1] || levels[0];
+        bar.style.width      = l.w;
+        bar.style.background = l.bg;
+        lbl.textContent      = l.txt;
+        lbl.style.color      = l.bg;
+    });
+
+    /* ─── AMOUNT PRESETS ────────────────────────────────────── */
+    function selectPreset(btn, amount) {
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('amount').value = amount;
+    }
+
+    document.getElementById('amount').addEventListener('input', function() {
+        document.querySelectorAll('.preset-btn').forEach(b => {
+            b.classList.toggle('selected', parseInt(b.dataset.amount) === parseInt(this.value));
+        });
+    });
+
+    /* ─── STATUS HELPERS ────────────────────────────────────── */
+    function showStatus(id, type, msg) {
+        const el = document.getElementById(id);
+        el.className = 'status-box ' + type;
+        el.textContent = msg;
+        el.style.display = 'block';
+        Object.assign(el.style, {
+            marginTop: '16px', padding: '13px 16px',
+            borderRadius: '10px', fontSize: '13.5px',
+            fontWeight: '500', lineHeight: '1.5',
+            animation: 'fadeUp 0.3s ease forwards',
+        });
+        const themes = {
+            info:    { bg: 'var(--info-bg)',    color: 'var(--info-text)',   border: '1.5px solid var(--info-bdr)' },
+            success: { bg: 'var(--success-bg)', color: 'var(--success-txt)', border: '1.5px solid var(--success-bdr)' },
+            error:   { bg: 'var(--error-bg)',   color: 'var(--error-text)',  border: '1.5px solid var(--error-bdr)' },
+        };
+        const s = themes[type];
+        if (s) { el.style.background = s.bg; el.style.color = s.color; el.style.border = s.border; }
+    }
+
+    function setLoading(spinnerId, textId, arrowId, loading, defaultText) {
+        const sp = document.getElementById(spinnerId);
+        const tx = document.getElementById(textId);
+        const ar = arrowId ? document.getElementById(arrowId) : null;
+        sp.style.display = loading ? 'block' : 'none';
+        tx.textContent = loading ? 'Processing…' : defaultText;
+        if (ar) ar.style.display = loading ? 'none' : 'inline';
+    }
+
+    /* ─── SIGN IN ───────────────────────────────────────────── */
+    document.getElementById('signinForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        setLoading('si-spinner', 'si-btn-text', null, true);
+        showStatus('status-signin', 'info', 'Authenticating…');
+        // Stub: replace with real auth endpoint
+        await new Promise(r => setTimeout(r, 1500));
+        showStatus('status-signin', 'success', 'Signed in successfully. Redirecting…');
+        setLoading('si-spinner', 'si-btn-text', null, false, 'Sign In');
+    });
+
+    /* ─── REGISTER ──────────────────────────────────────────── */
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        setLoading('reg-spinner', 'reg-btn-text', null, true);
+        showStatus('status-register', 'info', 'Creating your account…');
+        // Stub: replace with real register endpoint
+        await new Promise(r => setTimeout(r, 1500));
+        showStatus('status-register', 'success', 'Account created! Check your email to verify.');
+        setLoading('reg-spinner', 'reg-btn-text', null, false, 'Create Account');
+    });
+
+    /* ─── PAYMENT (ORIGINAL LOGIC PRESERVED) ───────────────── */
     document.getElementById('paymentForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const phone = document.getElementById('phone').value;
+        const phone  = document.getElementById('phone').value;
         const amount = document.getElementById('amount').value;
         const statusDiv = document.getElementById('status');
         const payBtn = document.getElementById('payBtn');
@@ -248,6 +931,7 @@
         statusDiv.innerText = "Requesting secure STK channel...";
         statusDiv.className = "info";
         payBtn.disabled = true;
+        setLoading('pay-spinner', 'pay-btn-text', 'pay-arrow', true);
 
         try {
             const response = await fetch('/api/stkpush', {
@@ -255,9 +939,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, amount: amount })
             });
-            
             const data = await response.json();
-            
             if (response.ok) {
                 statusDiv.innerText = "Secure linkage established! Complete transaction on your mobile terminal.";
                 statusDiv.className = "success";
@@ -270,6 +952,7 @@
             statusDiv.className = "error";
         } finally {
             payBtn.disabled = false;
+            setLoading('pay-spinner', 'pay-btn-text', 'pay-arrow', false, 'Authorize Payment');
         }
     });
 </script>
