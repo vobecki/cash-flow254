@@ -3,86 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashflow254 Checkout</title>
+    <title>Cashflow254 — Secure Gateway</title>
     <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --accent-green: #10b981;
+            --accent-hover: #059669;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --input-bg: #1f2937;
+            --border-color: #374151;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #f4f7f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
+
         .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            background: var(--card-bg);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
         }
-        h2 {
-            margin-top: 0;
-            color: #333;
+
+        .brand-header {
             text-align: center;
+            margin-bottom: 32px;
         }
+
+        .brand-header h2 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-header p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
+
         label {
             display: block;
             margin-bottom: 8px;
+            font-size: 13px;
             font-weight: 600;
-            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
         }
+
+        .input-wrapper {
+            position: relative;
+        }
+
         input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 14px 16px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             box-sizing: border-box;
             font-size: 16px;
+            color: var(--text-main);
+            transition: all 0.2s ease;
         }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+
+        input::placeholder {
+            color: #4b5563;
+        }
+
         button {
             width: 100%;
-            padding: 14px;
-            background-color: #00cc66;
-            color: white;
+            padding: 16px;
+            background-color: var(--accent-green);
+            color: #ffffff;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
         }
+
         button:hover {
-            background-color: #00b359;
+            background-color: var(--accent-hover);
         }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            background-color: #4b5563;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
         #status {
-            margin-top: 20px;
+            margin-top: 24px;
             text-align: center;
+            font-size: 14px;
             font-weight: 500;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
         }
-        .success { color: #00b359; }
-        .error { color: #ff3333; }
+
+        .info {
+            display: block !important;
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .success {
+            display: block !important;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .error {
+            display: block !important;
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Cashflow254 Payment</h2>
+    <div class="brand-header">
+        <h2>CASHFLOW254</h2>
+        <p>Secure M-Pesa Payment Gateway</p>
+    </div>
+    
     <form id="paymentForm">
         <div class="form-group">
-            <label for="phone">M-Pesa Phone Number</label>
-            <input type="text" id="phone" placeholder="e.g. 254712345678" required>
+            <label for="phone">Phone Number</label>
+            <div class="input-wrapper">
+                <input type="text" id="phone" placeholder="e.g. 254712345678" required>
+            </div>
         </div>
         <div class="form-group">
             <label for="amount">Amount (KES)</label>
-            <input type="number" id="amount" placeholder="e.g. 10" required>
+            <div class="input-wrapper">
+                <input type="number" id="amount" placeholder="Minimum 10 KES" required>
+            </div>
         </div>
-        <button type="submit" id="payBtn">Pay Now</button>
+        <button type="submit" id="payBtn">Initiate STK Push</button>
     </form>
+    
     <div id="status"></div>
 </div>
 
@@ -95,7 +196,7 @@
         const payBtn = document.getElementById('payBtn');
 
         statusDiv.innerText = "Sending STK Push prompt...";
-        statusDiv.className = "";
+        statusDiv.className = "info";
         payBtn.disabled = true;
 
         try {
@@ -108,14 +209,14 @@
             const data = await response.json();
             
             if (response.ok) {
-                statusDiv.innerText = "STK Push sent successfully! Check your phone to enter PIN.";
+                statusDiv.innerText = "STK Push sent successfully! Enter your PIN on your phone.";
                 statusDiv.className = "success";
             } else {
                 statusDiv.innerText = "Error: " + (data.error || "Failed to trigger push.");
                 statusDiv.className = "error";
             }
         } catch (err) {
-            statusDiv.innerText = "Network error occurred.";
+            statusDiv.innerText = "Network error occurred. Connection failed.";
             statusDiv.className = "error";
         } finally {
             payBtn.disabled = false;
