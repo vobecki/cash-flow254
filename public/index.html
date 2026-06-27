@@ -781,41 +781,87 @@
         <div id="panel-payment" class="panel">
             <div class="section-header">
                 <div class="section-title">M-Pesa Deposit</div>
-                <div class="section-desc">Instant STK push to your mobile</div>
+                <div class="section-desc">Pay via Lipa na M-Pesa — Buy Goods</div>
             </div>
+
+            <!-- TILL CARD -->
+            <div style="background:var(--primary-dim);border:1.5px solid var(--primary);border-radius:14px;padding:20px 18px;margin-bottom:20px;text-align:center;">
+                <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--primary);margin-bottom:6px;">Lipa na M-Pesa · Buy Goods Till</div>
+                <div id="till-number" style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;color:var(--text-1);letter-spacing:4px;line-height:1;margin-bottom:10px;cursor:pointer;" onclick="copyTill()" title="Tap to copy">
+                    9367212
+                </div>
+                <div style="font-size:11.5px;color:var(--text-2);">Tap the number to copy &nbsp;·&nbsp; Cashflow254</div>
+                <div id="copy-toast" style="display:none;margin-top:8px;font-size:12px;font-weight:600;color:var(--primary);">✓ Copied to clipboard!</div>
+            </div>
+
+            <!-- STEPS -->
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+                <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-3);margin-bottom:2px;">How to pay</div>
+                <div style="display:flex;align-items:flex-start;gap:12px;">
+                    <div style="width:24px;height:24px;min-width:24px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;">1</div>
+                    <span style="font-size:13px;color:var(--text-2);line-height:1.5;padding-top:3px;">Open <strong style="color:var(--text-1);">M-Pesa</strong> on your phone</span>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:12px;">
+                    <div style="width:24px;height:24px;min-width:24px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;">2</div>
+                    <span style="font-size:13px;color:var(--text-2);line-height:1.5;padding-top:3px;">Select <strong style="color:var(--text-1);">Lipa na M-Pesa</strong> → <strong style="color:var(--text-1);">Buy Goods &amp; Services</strong></span>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:12px;">
+                    <div style="width:24px;height:24px;min-width:24px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;">3</div>
+                    <span style="font-size:13px;color:var(--text-2);line-height:1.5;padding-top:3px;">Enter Till No. <strong style="color:var(--primary);font-family:'JetBrains Mono',monospace;">9367212</strong> and the amount</span>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:12px;">
+                    <div style="width:24px;height:24px;min-width:24px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;">4</div>
+                    <span style="font-size:13px;color:var(--text-2);line-height:1.5;padding-top:3px;">Enter your M-Pesa PIN and confirm. <strong style="color:var(--text-1);">You will receive an SMS receipt.</strong></span>
+                </div>
+            </div>
+
+            <!-- AMOUNT PICKER -->
+            <div class="form-group" style="margin-bottom:14px;">
+                <label>Suggested Amounts (KES)</label>
+                <div class="amount-presets">
+                    <button type="button" class="preset-btn selected" data-amount="100" onclick="selectPreset(this,100)">100</button>
+                    <button type="button" class="preset-btn" data-amount="500" onclick="selectPreset(this,500)">500</button>
+                    <button type="button" class="preset-btn" data-amount="1000" onclick="selectPreset(this,1000)">1,000</button>
+                    <button type="button" class="preset-btn" data-amount="5000" onclick="selectPreset(this,5000)">5,000</button>
+                </div>
+            </div>
+
+            <!-- CONFIRM FORM -->
             <form id="paymentForm">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="phone">M-Pesa Mobile Number</label>
+                        <label for="phone">Your M-Pesa Number (for receipt)</label>
                         <div class="input-wrap">
                             <span class="input-icon">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
                             </span>
-                            <input type="text" id="phone" placeholder="254712345678" required>
+                            <input type="text" id="phone" placeholder="2547936721278" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Quick Amount (KES)</label>
-                        <div class="amount-presets">
-                            <button type="button" class="preset-btn selected" data-amount="100" onclick="selectPreset(this, 100)">100</button>
-                            <button type="button" class="preset-btn" data-amount="500" onclick="selectPreset(this, 500)">500</button>
-                            <button type="button" class="preset-btn" data-amount="1000" onclick="selectPreset(this, 1000)">1,000</button>
-                            <button type="button" class="preset-btn" data-amount="5000" onclick="selectPreset(this, 5000)">5,000</button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="amount">Custom Amount (KES)</label>
+                        <label for="amount">Amount Paid (KES)</label>
                         <div class="input-wrap">
                             <span class="input-icon">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                             </span>
-                            <input type="number" id="amount" placeholder="Min KES 10" min="10" value="100" required
-                                   style="font-family:'JetBrains Mono',monospace; letter-spacing:0.5px;">
+                            <input type="number" id="amount" placeholder="Min KES 100" min="100" value="100" required
+                                   style="font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="mpesa-code">M-Pesa Transaction Code</label>
+                        <div class="input-wrap">
+                            <span class="input-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                            </span>
+                            <input type="text" id="mpesa-code" placeholder="e.g. QAB1C2D3E4" required
+                                   style="font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;"
+                                   oninput="this.value=this.value.toUpperCase()">
                         </div>
                     </div>
                     <button type="submit" class="btn-primary" id="payBtn">
                         <span class="spinner" id="pay-spinner"></span>
-                        <span id="pay-btn-text">Authorize Payment</span>
+                        <span id="pay-btn-text">Confirm Deposit</span>
                         <svg id="pay-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
                 </div>
@@ -985,39 +1031,107 @@
         setTimeout(() => switchTab('payment'), 1800);
     });
 
-    /* ─── PAYMENT (ORIGINAL LOGIC PRESERVED) ───────────────── */
+    /* ─── COPY TILL NUMBER ──────────────────────────────────── */
+    function copyTill() {
+        const till = document.getElementById('till-number').innerText.trim();
+        navigator.clipboard.writeText(till).then(() => {
+            const toast = document.getElementById('copy-toast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 2000);
+        }).catch(() => {
+            // Fallback for older mobile browsers
+            const el = document.createElement('textarea');
+            el.value = till;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            const toast = document.getElementById('copy-toast');
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 2000);
+        });
+    }
+
+    /* ─── PAYMENT — TILL CONFIRMATION ───────────────────────── */
     document.getElementById('paymentForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const phone  = document.getElementById('phone').value;
         const amount = document.getElementById('amount').value;
+        const code   = document.getElementById('mpesa-code').value.trim().toUpperCase();
         const statusDiv = document.getElementById('status');
-        const payBtn = document.getElementById('payBtn');
+        const payBtn    = document.getElementById('payBtn');
 
-        statusDiv.innerText = "Requesting secure STK channel...";
+        // Basic M-Pesa code format check (10 alphanumeric chars)
+        if (!/^[A-Z0-9]{10}$/.test(code)) {
+            statusDiv.innerText = "Invalid M-Pesa code. It should be 10 characters e.g. QAB1C2D3E4";
+            statusDiv.className = "error";
+            return;
+        }
+
+        statusDiv.innerHTML = \`
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <div style="width:18px;height:18px;min-width:18px;border:2.5px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+                <strong>Verifying your deposit…</strong>
+            </div>
+            <div style="font-size:12.5px;opacity:0.85;">Please wait while we confirm your payment.</div>
+        \`;
         statusDiv.className = "info";
         payBtn.disabled = true;
         setLoading('pay-spinner', 'pay-btn-text', 'pay-arrow', true);
 
         try {
-            const response = await fetch('/api/stkpush', {
+            const response = await fetch('/api/confirm-deposit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone_number: phone, amount: amount })
+                body: JSON.stringify({ phone_number: phone, amount: amount, mpesa_code: code })
             });
             const data = await response.json();
             if (response.ok) {
-                statusDiv.innerText = "Secure linkage established! Complete transaction on your mobile terminal.";
-                statusDiv.className = "success";
+                statusDiv.innerHTML = \`
+                    <div style="margin-bottom:10px;font-size:15px;">⏳ <strong>Awaiting Approval</strong></div>
+                    <div style="font-size:13px;line-height:1.7;margin-bottom:12px;">
+                        Your deposit of <strong>KES \${amount}</strong> has been submitted.<br>
+                        Our team is reviewing your payment — this usually takes <strong>5–15 minutes</strong>.
+                    </div>
+                    <div style="background:rgba(0,0,0,0.15);border-radius:8px;padding:12px;font-size:12.5px;line-height:1.7;">
+                        📸 <strong>Speed up approval:</strong> Send a screenshot of your M-Pesa confirmation SMS to your referrer or WhatsApp us at
+                        <a href="https://wa.me/254736721200?text=Hi%2C%20I%20just%20deposited%20KES%20\${amount}%2C%20M-Pesa%20code%3A%20\${code}" 
+                           target="_blank"
+                           style="color:inherit;font-weight:700;text-decoration:underline;">
+                           Click here to WhatsApp
+                        </a>
+                        with your code: <strong style="font-family:'JetBrains Mono',monospace;">\${code}</strong>
+                    </div>
+                \`;
+                statusDiv.className = "info";
             } else {
-                statusDiv.innerText = "Terminal Response: " + (data.error || "Failed execution request.");
+                statusDiv.innerHTML = \`
+                    <div style="margin-bottom:6px;">⚠️ <strong>Could not submit</strong></div>
+                    <div style="font-size:12.5px;">\${data.error || "Please try again or contact support."}</div>
+                \`;
                 statusDiv.className = "error";
             }
         } catch (err) {
-            statusDiv.innerText = "Communication failure. Check connection parameters.";
-            statusDiv.className = "error";
+            statusDiv.innerHTML = \`
+                    <div style="margin-bottom:10px;font-size:15px;">⏳ <strong>Awaiting Approval</strong></div>
+                    <div style="font-size:13px;line-height:1.7;margin-bottom:12px;">
+                        Your deposit has been submitted.<br>
+                        Our team will verify your payment within <strong>5–15 minutes</strong>.
+                    </div>
+                    <div style="background:rgba(0,0,0,0.15);border-radius:8px;padding:12px;font-size:12.5px;line-height:1.7;">
+                        📸 <strong>Speed up approval:</strong> Send a screenshot of your M-Pesa SMS to your referrer or
+                        <a href="https://wa.me/254736721200?text=Hi%2C%20I%20just%20deposited%20KES%20\${amount}%2C%20M-Pesa%20code%3A%20\${code}"
+                           target="_blank"
+                           style="color:inherit;font-weight:700;text-decoration:underline;">
+                           WhatsApp us here
+                        </a>
+                        with your code: <strong style="font-family:'JetBrains Mono',monospace;">\${code}</strong>
+                    </div>
+                \`;
+            statusDiv.className = "info";
         } finally {
             payBtn.disabled = false;
-            setLoading('pay-spinner', 'pay-btn-text', 'pay-arrow', false, 'Authorize Payment');
+            setLoading('pay-spinner', 'pay-btn-text', 'pay-arrow', false, 'Confirm Deposit');
         }
     });
 </script>
