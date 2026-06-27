@@ -54,6 +54,27 @@ app.post('/api/stkpush', async (req, res) => {
 });
 
 // 🔵 Route: Listens for Webhook Confirmations from IntaSend
+app.post('/api/confirm-deposit', (req, res) => {
+  const { phone_number, amount, mpesa_code } = req.body;
+
+  if (!phone_number || !amount || !mpesa_code) {
+    return res.status(400).json({ error: 'phone_number, amount, and mpesa_code are required' });
+  }
+
+  if (!/^[A-Z0-9]{10}$/.test(mpesa_code)) {
+    return res.status(400).json({ error: 'Invalid M-Pesa transaction code format.' });
+  }
+
+  // In a real deployment, validate this deposit against your payment processor or database.
+  return res.status(200).json({
+    message: 'Deposit confirmation received',
+    phone_number,
+    amount,
+    mpesa_code
+  });
+});
+
+// 🔵 Route: Listens for Webhook Confirmations from IntaSend
 app.post('/api/webhook', (req, res) => {
   const payload = req.body;
   console.log('Valid Webhook Activity Received:', payload);

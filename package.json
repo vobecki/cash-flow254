@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Vercel Deployment for Cashflow254 Payment System",
   "main": "api/server.js",
+  "scripts": {
+    "start": "node api/server.js"
+  },
   "dependencies": {
     "axios": "^1.6.0",
     "cors": "^2.8.5",
